@@ -1,14 +1,19 @@
-var globalProps = Object.getOwnPropertyNames(window);
+!(function() {
+    'use strict';
 
-window.addEventListener('load', function() {
-    function getGlobalProperty() {
-        var currentPropList = Object.getOwnPropertyNames(window);
+    var globalProps = Object.getOwnPropertyNames(window);
 
-        return currentPropList.filter(duplicateProperty);
-    }
+    window.addEventListener('load', function() {
+        function duplicateProperty(propName) {
+            return globalProps.indexOf(propName) === -1;
+        }
 
-    function duplicateProperty(propName) {
-        return globalProps.indexOf(propName) === -1;
-    }
-    console.log(getGlobalProperty());
-}, false);
+        globalProps = (function() {
+            var currentPropList = Object.getOwnPropertyNames(window);
+
+            return currentPropList.filter(duplicateProperty);
+        }());
+
+        console.log(globalProps);
+    }, false);
+}());
